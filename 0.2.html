@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maris Junior School</title>
+    <div id="search-filter-container">
+        <input type="text" id="search-input" placeholder="Search...">
+        <select id="section-filter">
+            <option value="all">All Sections</option>
+            <option value="home">Home</option>
+            <option value="announcements">Announcements</option>
+            <option value="events">Events</option>
+            <option value="resources">Resources</option>
+            <option value="album">School Album</option>
+            <option value="classes">Classes</option>
+            <option value="calendar">School Calendar</option>
+            <option value="co-curricular">Co-Curricular</option>
+            <option value="parent-portal">Parent Portal</option>
+            <option value="faq">FAQ</option>
+            <option value="privacy-policy">Privacy Policy</option>
+            <!-- Add more options for each section -->
+        </select>
+        <button id="search-button" onclick="performSearch()">🔍</button>
+        <button id="filter-button" onclick="toggleSearchBar()">🔒</button>
+    </div>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #ffffff;
+            color: #1f456e;
+            overflow-x: hidden;
+        }
+
+        header {
+            background-color: #1f456e;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px;
+        }
+
+        nav {
+            background-color: #3b5998;
+            color: #ffffff;
+            padding: 10px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        nav button {
+            background-color: #3b5998;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        main {
+            background: linear-gradient(to right, #ffffff, #dcdcdc);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        footer {
+            background-color: #1f456e;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        @keyframes emphasize {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        h2 {
+            animation: emphasize 1s ease-in-out;
+        }
+
+        /* Watermark Animation */
+        @keyframes moveWatermark {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .watermark {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 20px;
+            color: rgba(0, 0, 0, 0.1);
+            position: fixed;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            animation: moveWatermark 10s linear infinite;
+        }
+        #album-table-container{
+            margin-top: 10px;
+        }
+        table{
+            width: 100%;
+            border-collapse: 
+collapse;
+            margin-top: 
+10px;
+        }
+        th, td{
+            border: 1px
+solid #ddd;
+            padding: 8px;
+            text-align: 
+left;
+        }
+        th{
+            background-color: #1f456e;
+                        color: #ffffff;
+        }
+        #search-filter-container {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    #search-input,
+    #section-filter,
+    #search-button,
+    #filter-button {
+        margin-right: 10px;
+    }
+
+    #search-input,
+    #section-filter {
+        display: none;
+    }
+
+    #search-filter-container.active #search-input,
+    #search-filter-container.active #section-filter {
+        display: inline-block;
+    }
+    table img {
+    max-width :300px; /* Adjust the maximum width as needed */
+    max-height: 300px; /* Adjust the maximum height as needed */
+}
+    .album-table-container {
+            display: none;
+        }
+
+        .album-tabs {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .album-tab {
+            cursor: pointer;
+            padding: 10px;
+            background-color: #3b5998;
+            color: #ffffff;
+            border: 1px solid #1f456e;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
+
+        .album-tab:hover {
+            background-color: #1f456e;
+        }
+
+        .album-tab.active {
+            background-color: #1f456e;
+        }
+
+        .album-content {
+            border: 1px solid #1f456e;
+            border-radius: 0 5px 5px 5px;
+            padding: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #1f456e;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1>Maris Junior School</h1>
+        <p>School Motto: <em>Together We Are Winners</em></p>
+    </header>
+
+    <!-- Navigation Section -->
+    <nav>
+        <ul>
+            <li><button onclick="location.href='#home'">Home</button></li>
+            <li><button onclick="location.href='#announcements'">Announcements</button></li>
+            <li><button onclick="location.href='#events'">Events</button></li>
+            <li><button onclick="location.href='#resources'">Resources</button></li>
+            <li><button onclick="location.href='#album'">School Album</button></li>
+            <li><button onclick="location.href='#classes'">Classes</button></li>
+            <li><button onclick="location.href='#calendar'">School Calendar</button></li>
+            <li><button onclick="location.href='#co-curricular'">Co-Curricular</button></li>
+            <li><button onclick="location.href='#parent-portal'">Parent Portal</button></li>
+            <li><button onclick="location.href='#faq'">FAQ</button></li>
+            <li><button onclick="location.href='#privacy-policy'">Privacy Policy</button></li>
+            <li><button onclick="location.href='#contact'">Contact</button></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content Section -->
+    <main>
+        <section id="home">
+            <h2>Welcome to Maris Junior School</h2>
+            <p>Providing quality education for young minds.</p>
+        </section>
+
+        <section id="announcements">
+            <h2>Announcements</h2>
+            <p>Stay updated with the latest news and announcements from our school.</p>
+            <!-- Add dynamic content for announcements -->
+        </section>
+
+        <section id="events">
+            <h2>Upcoming Events</h2>
+            <p>Explore exciting events happening at Maris Junior School.</p>
+            <!-- Add dynamic content for events -->
+        </section>
+
+        <section id="resources">
+            <h2>Parent and Student Resources</h2>
+            <p>Access helpful resources for parents and students.</p>
+            <!-- Add dynamic content for resources -->
+        </section>
+
+        <section id="album">
+            <h2 onclick="toggleAlbumTabs()">School Album</h2>
+            <p>Explore memorable moments captured in our school album.</p>
+
+            <!-- Album Tabs -->
+            <ul class="album-tabs">
+                <li class="album-tab" onclick="showTab('tab1')">Tab 1</li>
+                <li class="album-tab" onclick="showTab('tab2')">Tab 2</li>
+                <!-- Add more tabs as needed -->
+            </ul>
+
+            <!-- Album Content -->
+            <div id="tab1" class="album-content album-table-container">
+                <!-- Table for School Album -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Photo</th>
+                            <th>Description</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><img src="C:\Users\Maurice\Documents\IMG_20221028_131721.jpg" alt="Photo 1">
+                                <img src="C:\Users\Maurice\Documents\IMG_20221028_132512.jpg" alt="photo 2">
+                                <img src="C:\Users\Maurice\Documents\IMG_20221028_131651.jpg" alt="Photo 3">
+                                <img src="C:\Users\Maurice\Documents\IMG_20221028_132104.jpg" alt="Photo 4">
+                            </td>
+
+                            <td>Caption for Photo 1</td>
+                            <td>MM/DD/YYYY</td>
+                        </tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+            <div id="tab2" class="album-content album-table-container">
+                <!-- Table for School Album -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Photo</th>
+                            <th>Description</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><img src="C:\Users\Maurice\Documents\IMG_20221028_123454.jpg" alt="Photo 1"></td>
+                            <td>Caption for Photo 1</td>
+                            <td>MM/DD/YYYY</td>
+                        </tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Additional Tabs and Content -->
+            <!-- Add more divs for additional tabs -->
+
+        </section>
+
+        <section id="classes">
+            <h2>Classes Offered</h2>
+            <p>Discover the various classes available at Maris Junior School.</p>
+            <!-- Add dynamic content for classes -->
+        </section>
+        
+        <section id="calendar">
+            <h2>School Calendar</h2>
+            <p>Stay informed about all important days and events in the school term.</p>
+            <!-- Add dynamic content for the school calendar -->
+        </section>
+
+        <section id="co-curricular">
+            <h2>Co-Curricular Activities</h2>
+            <p>Explore different clubs, sports teams, and other extracurricular activities.</p>
+            <!-- Add dynamic content for co-curricular activities -->
+        </section>
+
+        <section id="parent-portal">
+            <h2>Parent Portal</h2>
+            <p>Access your child's reports and assignments through the parent portal.</p>
+            <!-- Add dynamic content for parent portal -->
+        </section>
+
+        <section id="faq">
+            <h2>FAQ</h2>
+            <p>Find answers to frequently asked questions about Maris Junior School.</p>
+            <!-- Add dynamic content for FAQ -->
+        </section>
+
+        <section id="privacy-policy">
+            <h2>Privacy Policy</h2>
+            <p>Read our privacy policy to understand how we handle your information.</p>
+            <!-- Add dynamic content for privacy policy -->
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>Contact us at: <a href="mailto:info@marisjuniorschool.com">info@marisjuniorschool.com</a></p>
+    </footer>
+
+    <!-- Watermark -->
+    <div class="watermark">Maris Junior School</div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Trigger the emphasis animation on page load
+            var headings = document.querySelectorAll("h2");
+            headings.forEach(function(heading) {
+                heading.style.animation = "none"; // Reset animation
+                void heading.offsetWidth; // Trigger reflow
+                heading.style.animation = null;
+            });
+        });
+    </script>
+    <script>
+        function toggleSearchBar() {
+            var searchBar = document.getElementById('search-filter-container');
+            searchBar.classList.toggle('active');
+        }
+    
+        function performSearch() {
+            var searchInput = document.getElementById('search-input').value.toLowerCase();
+            var sectionFilter = document.getElementById('section-filter').value;
+            var sections = document.querySelectorAll('section');
+    
+            sections.forEach(function(section) {
+                var sectionId = section.id.toLowerCase();
+                if (sectionFilter === 'all' || sectionId === sectionFilter) {
+                    var sectionText = section.innerText.toLowerCase();
+                    if (sectionText.includes(searchInput)) {
+                        section.style.display = 'block';
+                    } else {
+                        section.style.display = 'none';
+                    }
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        }
+    </script>
+    <script>
+        function toggleAlbumTabs() {
+            var albumTabs = document.querySelector('.album-tabs');
+            albumTabs.classList.toggle('active');
+        }
+
+        function showTab(tabId) {
+            var tabs = document.querySelectorAll('.album-content');
+            tabs.forEach(function(tab) {
+                tab.style.display = 'none';
+            });
+
+            var selectedTab = document.getElementById(tabId);
+            if (selectedTab) {
+                selectedTab.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
